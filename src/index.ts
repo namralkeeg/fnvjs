@@ -16,7 +16,36 @@ const FNV_OFFSETS: { [index: number]: bigint } = {
   1024: 14197795064947621068722070641403218320880622795441933960878474914617582723252296732303717722150864096521202355549365628174669108571814760471015076148029755969804077320157692458563003215304957150157403644460363550505412711285966361610267868082893823963790439336411086884584107735010676915n
 };
 
+interface algorithm {
+  (input: string, bits: number): bigint;
+}
+
 const encoder: TextEncoder = new TextEncoder();
+
+export function fnv032(input: string): number {
+  let hash = 0;
+  const uint8array: Uint8Array = encoder.encode(input);
+
+  for (let i = 0, c = uint8array.length; i < c; i++) {
+    hash += (hash << 1) + (hash << 4) + (hash << 7) + (hash << 8) + (hash << 24);
+    hash ^= uint8array[i];
+  }
+
+  return hash >>> 0;
+}
+
+export const fnv0: algorithm = (input: string, bits = 32) => {
+  const fnvPrime: bigint = FNV_PRIMES[bits];
+  let hash = 0n;
+  const uint8array: Uint8Array = encoder.encode(input);
+
+  for (let i = 0; i < uint8array.length; i++) {
+    hash = BigInt.asUintN(bits, hash * fnvPrime);
+    hash ^= BigInt(uint8array[i]);
+  }
+
+  return hash;
+};
 
 export function fnv132(input: string): number {
   let hash = 2166136261;
@@ -30,7 +59,7 @@ export function fnv132(input: string): number {
   return hash >>> 0;
 }
 
-export function fnv1(input: string, bits = 32): bigint {
+export const fnv1: algorithm = (input: string, bits = 32) => {
   const fnvPrime: bigint = FNV_PRIMES[bits];
   let hash: bigint = FNV_OFFSETS[bits];
   const uint8array: Uint8Array = encoder.encode(input);
@@ -41,7 +70,7 @@ export function fnv1(input: string, bits = 32): bigint {
   }
 
   return hash;
-}
+};
 
 export function fnv1a32(input: string): number {
   let hash = 2166136261;
@@ -55,7 +84,7 @@ export function fnv1a32(input: string): number {
   return hash >>> 0;
 }
 
-export function fnv1a(input: string, bits = 32): bigint {
+export const fnv1a: algorithm = (input: string, bits = 32) => {
   const fnvPrime: bigint = FNV_PRIMES[bits];
   let hash: bigint = FNV_OFFSETS[bits];
   const uint8array: Uint8Array = encoder.encode(input);
@@ -66,4 +95,14 @@ export function fnv1a(input: string, bits = 32): bigint {
   }
 
   return hash;
+};
+
+const ALGORITHMS: { [index: string]: algorithm } = {
+  fnv0: fnv0,
+  fnv1: fnv1,
+  fnv1a: fnv1a
+};
+
+export function fnv(input: string, algo: string, bits = 32): bigint {
+  return ALGORITHMS[algo](input, bits);
 }

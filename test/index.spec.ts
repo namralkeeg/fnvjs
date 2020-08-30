@@ -1,4 +1,4 @@
-import { fnv1, fnv1a, fnv1a32, fnv132 } from "../src";
+import { fnv, fnv1, fnv1a, fnv1a32, fnv132 } from "../src";
 
 test("fnv132", () => {
   expect(fnv132("the quick brown fox jumped over the lazy dog")).toEqual(0x19d97436);
@@ -26,8 +26,20 @@ test("fnv1a64", () => {
   );
 });
 
-// test("fnv1a128", () => {
-//   expect(fnv1a("the quick brown fox jumped over the lazy dog", 128)).toEqual(
-//     BigInt("0x4fb124b03ec8f8f8")
-//   );
-// });
+test("fnv-1-32", () => {
+  expect(fnv("the quick brown fox jumped over the lazy dog", "fnv1", 32)).toEqual(
+    BigInt("0x19d97436")
+  );
+});
+
+test("fnv-1a-32", () => {
+  expect(fnv("the quick brown fox jumped over the lazy dog", "fnv1a", 32)).toEqual(
+    BigInt("0x406d1fd8")
+  );
+});
+
+test("fnv-1a-64", () => {
+  expect(fnv("the quick brown fox jumped over the lazy dog", "fnv1a", 64)).toEqual(
+    BigInt("0x4fb124b03ec8f8f8")
+  );
+});
