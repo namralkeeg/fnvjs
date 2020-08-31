@@ -1,12 +1,12 @@
 {
   "name": "fnvjs",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "A FNV hashing library for JavaScript.",
   "main": "dist/cjs/index.js",
   "types": "dist/cjs/index.d.ts",
   "module": "dist/esm/index.js",
   "files": [
-    "dist/"
+    "dist"
   ],
   "scripts": {
     "build": "tsc && tsc -p tsconfig-cjs.json",

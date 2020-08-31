@@ -10,6 +10,12 @@ test("fnv132BigInt", () => {
   );
 });
 
+test("fnv164", () => {
+  expect(fnv1("the quick brown fox jumped over the lazy dog", 64)).toEqual(
+    BigInt("0xef207c40551d25f6")
+  );
+});
+
 test("fnv1a32", () => {
   expect(fnv1a32("the quick brown fox jumped over the lazy dog")).toEqual(0x406d1fd8);
 });
