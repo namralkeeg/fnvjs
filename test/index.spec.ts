@@ -1,4 +1,4 @@
-import { fnv, fnv1, fnv1a, fnv1a32, fnv132 } from "../src";
+import fnv, { fnv1, fnv1a, fnv1a32, fnv132 } from "../src";
 
 test("fnv132", () => {
   expect(fnv132("the quick brown fox jumped over the lazy dog")).toEqual(0x19d97436);
