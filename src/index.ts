@@ -22,11 +22,13 @@ const FNV_OFFSETS: { [index: number]: bigint } = {
   1024: 14197795064947621068722070641403218320880622795441933960878474914617582723252296732303717722150864096521202355549365628174669108571814760471015076148029755969804077320157692458563003215304957150157403644460363550505412711285966361610267868082893823963790439336411086884584107735010676915n
 };
 
+type BitSize = 32 | 64 | 128 | 256 | 512 | 1024;
+
 /**
  * Interface for functions implementing FNV algorithms.
  */
 interface Algorithm {
-  (input: string, bits: number): bigint;
+  (input: string, bits: BitSize): bigint;
 }
 
 /**
@@ -58,8 +60,8 @@ function fnv032(input: string): number {
  * FNV-0 hash algorithm. Left here for historical purposes.
  *
  * @param {string} input The UTF-8 string to hash.
- * @param {number} bits Bit size to use for the hash.
- * @returns {BigInt} Hash as a {@link bigint}.
+ * @param {BitSize} bits Bit size to use for the hash.
+ * @returns {bigint} Hash as a {@link bigint}.
  *
  * @deprecated Left in for historical purposes. Use FNV-1a instead.
  */
@@ -98,7 +100,7 @@ function fnv132(input: string): number {
  * FNV-1 hash algorithm.
  *
  * @param {string} input The UTF-8 string to hash.
- * @param {number} bits Bit size to use for the hash.
+ * @param {BitSize} bits Bit size to use for the hash.
  * @returns {bigint} Hash as a {@link bigint}.
  */
 const fnv1: Algorithm = (input: string, bits = 32) => {
@@ -136,7 +138,7 @@ function fnv1a32(input: string): number {
  * FNV-1a hash algorithm.
  *
  * @param {string} input The UTF-8 string to hash.
- * @param {number} bits Bit size to use for the hash.
+ * @param {BitSize} bits Bit size to use for the hash.
  * @returns {bigint} Hash as a {@link bigint}.
  */
 const fnv1a: Algorithm = (input: string, bits = 32) => {
@@ -169,12 +171,12 @@ const ALGORITHMS: { [index: string]: Algorithm } = {
 /**
  * The default FNV library hashing function.
  *
- * @param input The UTF-8 string to hash.
- * @param algo The name of the FNV algorithm to use. (fnv0, fnv1, fnv1a)
- * @param bits Bit size to use for the hash.
+ * @param {string} input The UTF-8 string to hash.
+ * @param {AlgorithmTypeStrings} algo The name of the FNV algorithm to use. (fnv0, fnv1, fnv1a)
+ * @param {BitSize} bits Bit size to use for the hash.
  * @returns {bigint} Hash as a {@link bigint}.
  */
-function fnv(input: string, algo: AlgorithmTypeStrings, bits = 32): bigint {
+function fnv(input: string, algo: AlgorithmTypeStrings, bits: BitSize = 32): bigint {
   return ALGORITHMS[AlgorithmType[algo]](input, bits);
 }
 
